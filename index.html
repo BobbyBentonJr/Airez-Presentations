@@ -205,13 +205,15 @@
         .timeline-marker {
             width: 40px;
             height: 40px;
-            background: #00d9ff;
+            background: transparent;
+            border: 1px solid #00d9ff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 14px;
+            color: #00d9ff;
             flex-shrink: 0;
             z-index: 1;
         }
@@ -328,14 +330,15 @@
             position: fixed;
             top: 40px;
             left: 80px;
-            font-size: 32px;
-            font-weight: 700;
-            color: #00d9ff;
             z-index: 100;
-            background: rgba(10, 22, 40, 0.8);
-            padding: 8px 16px;
-            border-radius: 6px;
-            backdrop-filter: blur(10px);
+            padding: 12px;
+        }
+
+        .logo img {
+            height: 28px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .tag {
@@ -372,7 +375,9 @@
     </style>
 </head>
 <body>
-    <img src="logo_color_white.png" alt="Airez">
+    <div class="logo">
+        <img src="https://bobbybentonjr.github.io/Airez-Presentations/logo_color_white.png" alt="Airez">
+    </div>
     <div class="slide-counter">
         <span id="current-slide">1</span> / <span id="total-slides">12</span>
     </div>
