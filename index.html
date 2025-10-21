@@ -413,7 +413,7 @@
         <div class="slide active">
             <div class="slide-header" style="text-align: center; margin: auto;">
                 <div class="slide-subtitle">Strategic Initiative</div>
-                <h1 class="slide-title" style="font-size: 64px; margin-bottom: 30px;">8-Week Strategic<br>Rebuild Plan</h1>
+                <h1 class="slide-title" style="font-size: 64px; margin-bottom: 30px;">8-Week Strategic<br>Process Rebuild Plan</h1>
                 <p class="slide-description" style="margin: 0 auto; max-width: 700px;">
                     Stop Feature Push-Through + Deliver Objective Q1 2026 Roadmap
                 </p>
@@ -427,13 +427,13 @@
                 <h2 class="slide-title">The Challenge & Solution</h2>
             </div>
             <div class="slide-content">
-                <div class="expandable-section">
+                <div class="expandable-section expanded">
                     <div class="expandable-header">
                         <div class="expandable-title">⚠️ The Challenge</div>
                         <div class="expandable-icon">▼</div>
                     </div>
                     <div class="expandable-content">
-                        <p>Without the former CEO, we lack a shared process for company strategy, product prioritization, and quarterly planning. This creates risk of arbitrary feature decisions, misaligned execution, and inability to scale product development systematically.</p>
+                        <p>Due to leadership changes affecting company and product initiatives, we lack a shared process for company strategy, product prioritization, and quarterly planning. This creates risk of arbitrary feature decisions, misaligned execution, and inability to scale product development systematically.</p>
                     </div>
                 </div>
 
@@ -454,7 +454,7 @@
                     </div>
                 </div>
 
-                <div class="expandable-section expanded">
+                <div class="expandable-section">
                     <div class="expandable-header">
                         <div class="expandable-title">🎯 The Outcome</div>
                         <div class="expandable-icon">▼</div>
@@ -1145,7 +1145,11 @@
 
         totalSlidesEl.textContent = totalSlides;
 
-        function showSlide(index) {
+        function showSlide(index, updateURL = true) {
+            // Ensure index is within bounds
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+
             slides.forEach((slide, i) => {
                 slide.classList.toggle('active', i === index);
             });
@@ -1161,6 +1165,25 @@
             if (slideContent) {
                 slideContent.scrollTop = 0;
             }
+
+            // Update URL hash
+            if (updateURL) {
+                window.history.pushState({ slide: index }, '', `#slide-${index + 1}`);
+            }
+        }
+
+        function getSlideFromURL() {
+            const hash = window.location.hash;
+            if (hash) {
+                const match = hash.match(/#slide-(\d+)/);
+                if (match) {
+                    const slideNum = parseInt(match[1], 10);
+                    if (slideNum >= 1 && slideNum <= totalSlides) {
+                        return slideNum - 1; // Convert to 0-based index
+                    }
+                }
+            }
+            return 0; // Default to first slide
         }
 
         prevBtn.addEventListener('click', () => {
@@ -1173,6 +1196,12 @@
             if (currentSlide < totalSlides - 1) {
                 showSlide(currentSlide + 1);
             }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (e) => {
+            const slideIndex = e.state ? e.state.slide : getSlideFromURL();
+            showSlide(slideIndex, false);
         });
 
         document.addEventListener('keydown', (e) => {
@@ -1191,7 +1220,9 @@
             }
         });
 
-        showSlide(0);
+        // Initialize: Show slide from URL or default to first slide
+        const initialSlide = getSlideFromURL();
+        showSlide(initialSlide);
     </script>
 </body>
 </html>
